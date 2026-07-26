@@ -80,7 +80,8 @@ a{color:var(--pt);text-decoration:none}
 .sub .nav-i{font-size:13.5px;padding:7px 10px;min-height:34px;color:var(--tx-s)}
 .sub .nav-i.on{color:var(--pt)}
 
-.main{flex:1;min-width:420px;padding:20px 24px 60px}
+.main{flex:1;min-width:0;padding:20px 24px 60px}
+@media(min-width:1000px){ .main{min-width:420px} }   /* 나란히 볼 때만 목록 최소폭 확보 */
 .crumb{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13px;color:var(--tx-s);margin-bottom:6px}
 .crumb b{color:var(--tx);font-weight:600}
 .head{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:16px}
@@ -243,14 +244,10 @@ body.resizing{user-select:none;cursor:col-resize}
 .foot a{color:var(--tx-s);text-decoration:underline}
 .foot .ver{color:#B6C0CD;font-size:11.5px}
 
-/* ── 모바일 ── */
+/* ── 태블릿 이하 : 분류를 서랍으로 ── */
 .scrim{position:fixed;inset:0;background:rgba(15,23,42,.4);z-index:44;display:none}
-@media(max-width:860px){
-  .bar{padding:0 14px;gap:10px}
-  .bar h1{font-size:16px}
-  .bar h1 span{display:none}
+@media(max-width:999px){
   .menu-btn{display:flex;align-items:center;justify-content:center}
-  .search{max-width:none}
   .side{
     position:fixed;top:0;left:0;height:100vh;z-index:45;background:var(--card);
     transform:translateX(-100%);transition:transform .22s;box-shadow:0 0 30px rgba(15,23,42,.15);
@@ -258,20 +255,70 @@ body.resizing{user-select:none;cursor:col-resize}
   }
   .side.open{transform:none}
   .scrim.on{display:block}
-  .main{padding:16px 14px 60px}
-  .head h2{font-size:19px}
-  .row{flex-wrap:wrap;padding:12px 14px;gap:10px}
-  .info{flex-basis:calc(100% - 54px)}
-  .acts{width:100%;justify-content:flex-end;gap:8px}
-  .acts .btn{height:44px;padding:0 16px}
-  .acts .star{width:44px;height:44px}
+  .acts .pv-btn{display:none}          /* 줄을 누르면 열리므로 버튼은 생략 */
+  .bar h1 span{display:none}
+  .list{max-width:none}
+  .acts .star{width:40px;height:40px}      /* 터치 기기 기준 */
+  .acts .btn{height:40px}
   .icon-btn{width:40px;height:40px}
-  .pane-foot .btn{height:44px;padding:0 16px}
+}
+
+/* ── 휴대폰 ── */
+@media(max-width:719px){
+  :root{--bar:auto}
+  .bar{
+    height:auto;min-height:52px;flex-wrap:wrap;padding:8px 12px;gap:8px 10px;
+    padding-top:max(8px,env(safe-area-inset-top));
+  }
+  .bar h1{font-size:15.5px;gap:7px;flex:1;min-width:0}
+  .bar h1 .sym{width:21px;height:22px}
+  .bar h1 span{display:none}
+  .menu-btn{width:34px;height:34px;margin-left:-4px}
+  .search{order:3;flex:0 0 100%;max-width:none;margin:0}
+  .search input{height:40px}
+  .search svg{top:10px}
+  .search .clr{top:7px}
+  .side{top:0;height:100vh;width:min(288px,84vw);flex-basis:auto}
+
+  .main{padding:12px 12px 40px;min-width:0}
+  .crumb{font-size:12.5px;margin-bottom:4px}
+  .head{margin-bottom:10px;gap:8px}
+  .head h2{font-size:18px}
+  .tools{width:100%;margin-left:0;flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
+  .tools::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto}
+
+  .list{border-radius:12px;max-width:none}
+  .grp{padding:9px 12px;font-size:12px}
+  .row{gap:10px;padding:9px 12px;min-height:64px;flex-wrap:nowrap}
+  .ext{width:34px;height:34px;font-size:9px;border-radius:7px}
+  .info .t{font-size:14.5px;line-height:1.4}
+  .info .m{font-size:11.5px;gap:6px;margin-top:2px}
+  .acts{gap:2px}
+  .acts .star{width:40px;height:40px}
+  .acts .btn{height:40px;padding:0 12px;font-size:13px}
+  .more{padding:16px}
+  .foot{font-size:12px;padding:0 2px}
+
+  /* 미리보기(전체 화면) */
+  .pane-head{padding:12px 12px;gap:4px;padding-top:max(12px,env(safe-area-inset-top))}
+  .pane-head h3{font-size:15px}
+  .pane-head .sub{font-size:11.5px}
+  .icon-btn{width:40px;height:40px}
+  .pane-body{padding:16px 14px}
+  .doc{font-size:14px}
+  .doc table{font-size:12.5px}
+  .doc td,.doc th{padding:6px 7px}
+  .pane-foot{padding:8px 12px;padding-bottom:max(8px,env(safe-area-inset-bottom))}
+  .pane-foot .btn{height:44px;padding:0 15px}
   .pane-foot .star{width:44px;height:44px}
-  .pv{height:100dvh;width:100%;border-radius:0;max-height:none}
-  .pv-body{padding:18px 16px}
-  .pv-foot{padding:10px 14px;padding-bottom:max(10px,env(safe-area-inset-bottom))}
-  .btn.lbl-sm span{display:none}
+  .guide{padding:20px 16px;border-radius:12px}
+  .guide h3{font-size:15.5px}
+  .guide p,.guide ul,.guide dd,.guide dt{font-size:14px}
+}
+@media(max-width:389px){
+  .acts .btn{padding:0 10px;font-size:12.5px}
+  .info .t{font-size:14px}
 }
 </style>
 </head>
@@ -307,7 +354,7 @@ body.resizing{user-select:none;cursor:col-resize}
       자료 출처 · <a href="https://www.gbe.kr/edupia/main.do" target="_blank" rel="noopener">경상북도교육청 학교지원종합자료실</a>
       (2026-07-22 기준) · 파일은 자료실 원본 서버에서 직접 내려받습니다.
       <br>경상북도교육청이 운영하는 공식 사이트가 아니며, 서식의 권리는 경상북도교육청에 있습니다.
-      <br><span class="ver">화면 버전 2026-07-26 (8)</span>
+      <br><span class="ver">화면 버전 2026-07-26 (9)</span>
     </footer>
   </main>
 
