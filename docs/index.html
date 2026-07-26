@@ -186,7 +186,7 @@ a{color:var(--pt);text-decoration:none}
 .row.sel{background:var(--pt-w)}
 .row.sel:hover{background:var(--pt-w)}
 /* 나란히 두기엔 좁은 화면: 패널을 화면 전체로 띄운다 */
-@media(max-width:1239px){
+@media(max-width:999px){
   .pane{
     position:fixed;inset:0;width:100%;flex-basis:auto;height:100dvh;z-index:60;
     border-left:none;display:none;box-shadow:0 0 40px rgba(15,23,42,.2);
@@ -197,8 +197,22 @@ a{color:var(--pt);text-decoration:none}
   .pane-body{padding:20px 18px}
   .pane-foot{padding-bottom:max(10px,env(safe-area-inset-bottom))}
 }
-/* 나란히 두되 여유가 적은 화면: 사이드바를 줄이고, 행 클릭으로 대신할 수 있는 미리보기 버튼은 감춘다 */
-@media(min-width:1240px) and (max-width:1439px){
+/* 나란히 두되 여유가 적은 화면: 왼쪽 분류를 접어 두고(햄버거로 열기) 목록에 자리를 준다 */
+@media(min-width:1000px) and (max-width:1279px){
+  .menu-btn{display:flex;align-items:center;justify-content:center}
+  .side{
+    position:fixed;top:0;left:0;height:100vh;z-index:45;background:var(--card);
+    transform:translateX(-100%);transition:transform .22s;box-shadow:0 0 30px rgba(15,23,42,.15);
+    padding-top:14px;
+  }
+  .side.open{transform:none}
+  .scrim.on{display:block}
+  .main{padding:20px 18px 60px}
+  .acts .pv-btn{display:none}
+  .pane{width:clamp(360px,36vw,440px);flex:0 0 clamp(360px,36vw,440px)}
+}
+/* 나란히는 되지만 아직 빠듯한 폭 */
+@media(min-width:1280px) and (max-width:1439px){
   .side{width:212px;flex:0 0 212px;padding:16px 8px 40px}
   .main{padding:20px 18px 60px}
   .acts .pv-btn{display:none}
@@ -284,7 +298,7 @@ a{color:var(--pt);text-decoration:none}
       자료 출처 · <a href="https://www.gbe.kr/edupia/main.do" target="_blank" rel="noopener">경상북도교육청 학교지원종합자료실</a>
       (2026-07-22 기준) · 파일은 자료실 원본 서버에서 직접 내려받습니다.
       <br>경상북도교육청이 운영하는 공식 사이트가 아니며, 서식의 권리는 경상북도교육청에 있습니다.
-      <br><span class="ver">화면 버전 2026-07-26 (5)</span>
+      <br><span class="ver">화면 버전 2026-07-26 (6)</span>
     </footer>
   </main>
 
