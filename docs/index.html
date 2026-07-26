@@ -8,6 +8,8 @@
 <meta property="og:title" content="경상북도교육청 서식 꾸러미">
 <meta property="og:description" content="서식 1,175종 검색 · 미리보기 · 내려받기">
 <meta property="og:type" content="website">
+<link rel="icon" href="symbol.png">
+<link rel="apple-touch-icon" href="symbol.png">
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
@@ -37,7 +39,7 @@ a{color:var(--pt);text-decoration:none}
   border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:14px;padding:0 20px;
 }
 .bar h1{font-size:17px;font-weight:600;margin:0;white-space:nowrap;display:flex;align-items:center;gap:9px}
-.bar h1 .sym{width:26px;height:26px;flex:0 0 auto}
+.bar h1 .sym{width:25px;height:26px;flex:0 0 auto;object-fit:contain}
 .bar h1 span{color:var(--tx-t);font-weight:400;font-size:13px}
 .search{position:relative;flex:1;max-width:460px;margin-left:auto}
 .search input{
@@ -163,12 +165,12 @@ a{color:var(--pt);text-decoration:none}
 
 /* ── 우측 미리보기 패널 ── */
 .pane{
-  display:none;width:var(--pane);flex:0 0 var(--pane);position:sticky;top:var(--bar);
+  display:none;width:clamp(380px,38vw,560px);flex:0 0 clamp(380px,38vw,560px);position:sticky;top:var(--bar);
   height:calc(100vh - var(--bar));border-left:1px solid var(--bd);background:var(--card);
 }
 .pane-empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:32px;color:var(--tx-t)}
 .pane-empty p{margin:0;text-align:center;font-size:14px;line-height:1.7}
-.sym-lg{width:46px;height:46px;opacity:.35}
+.sym-lg{width:48px;height:50px;object-fit:contain;opacity:.3}
 .pane-doc{height:100%;display:flex;flex-direction:column}
 .pane-head{display:flex;align-items:flex-start;gap:8px;padding:14px 16px;border-bottom:1px solid var(--bd)}
 .pane-head .tt{flex:1;min-width:0}
@@ -181,10 +183,16 @@ a{color:var(--pt);text-decoration:none}
 .pane-foot .sp{margin-left:auto}
 .row.sel{background:var(--pt-w)}
 .row.sel:hover{background:var(--pt-w)}
-@media(min-width:1180px){
+@media(min-width:1240px){
   .pane{display:block}
   .main{max-width:none}
   .ov{display:none !important}
+}
+/* 패널이 뜨는 좁은 노트북 화면: 사이드바를 줄이고, 행 클릭으로 대신할 수 있는 미리보기 버튼은 감춘다 */
+@media(min-width:1240px) and (max-width:1439px){
+  .side{width:212px;flex:0 0 212px;padding:16px 8px 40px}
+  .main{padding:20px 18px 60px}
+  .acts .pv-btn{display:none}
 }
 
 /* ── 사용설명서 ── */
@@ -235,24 +243,11 @@ a{color:var(--pt);text-decoration:none}
 </head>
 <body>
 
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <defs>
-    <linearGradient id="gbeBlue" x1="0" y1="1" x2="1" y2="0">
-      <stop offset="0" stop-color="#2E9CC9"/><stop offset="1" stop-color="#173990"/>
-    </linearGradient>
-    <symbol id="gbeSym" viewBox="0 0 100 100">
-      <path fill="#8DC63F" d="M9,50 A41,41 0 0 1 71,15.2 L61.6,30.9 A23,23 0 0 0 27,50 Z"/>
-      <path fill="url(#gbeBlue)" d="M91,50 A41,41 0 0 1 9,50 L27,50 A23,23 0 0 0 73,50 Z"/>
-      <path fill="#F99B1C" d="M69.5,35 L88.5,35 A41,41 0 0 1 85,62 L70.5,56.5 A23,23 0 0 0 69.5,35 Z"/>
-    </symbol>
-  </defs>
-</svg>
-
 <header class="bar">
   <button class="menu-btn" id="menuBtn" aria-label="분류 메뉴">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
   </button>
-  <h1><svg class="sym" aria-hidden="true"><use href="#gbeSym"/></svg>경상북도교육청 서식 꾸러미 <span id="totalCnt"></span></h1>
+  <h1><img class="sym" src="symbol.png" alt="">경상북도교육청 서식 꾸러미 <span id="totalCnt"></span></h1>
   <div class="search">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
     <input id="q" type="search" placeholder="서식 이름·업무로 검색" autocomplete="off" aria-label="서식 검색">
@@ -283,7 +278,7 @@ a{color:var(--pt);text-decoration:none}
 
   <aside class="pane" id="pane" aria-label="서식 미리보기">
     <div class="pane-empty" id="paneEmpty">
-      <svg class="sym-lg" aria-hidden="true"><use href="#gbeSym"/></svg>
+      <img class="sym-lg" src="symbol.png" alt="">
       <p>목록에서 서식을 고르면<br>이 자리에서 내용을 볼 수 있습니다.</p>
     </div>
     <div class="pane-doc" id="paneDoc" hidden>
@@ -634,7 +629,7 @@ function rowEl(f, idx) {
     if (VIEW.mode === 'fav') { SHOWN = 0; render(); }
     buildSide();
   };
-  const pv = el('button', 'btn');
+  const pv = el('button', 'btn pv-btn');
   pv.textContent = '미리보기';
   pv.disabled = !f[F.PREV];
   if (!f[F.PREV]) pv.title = '이 형식은 미리보기를 만들 수 없습니다';
@@ -661,7 +656,7 @@ function rowEl(f, idx) {
 
 // ── 미리보기 (넓은 화면은 우측 패널, 좁으면 모달) ──
 const cache = new Map();
-const PANE_MQ = window.matchMedia('(min-width:1180px)');
+const PANE_MQ = window.matchMedia('(min-width:1240px)');
 const usePane = () => PANE_MQ.matches;
 // 패널/모달 각각의 요소 묶음
 const UI = {
@@ -730,8 +725,13 @@ function openPv(idx) {
     cache.set(want, txt);
     if (CUR[PVI] && CUR[PVI][F.ID] === want) showDoc(txt);
   }).catch(() => {
-    if (CUR[PVI] && CUR[PVI][F.ID] === want)
-      body.innerHTML = '<div class="notice">미리보기를 불러오지 못했습니다. 내려받아 확인해 주세요.</div>';
+    if (!CUR[PVI] || CUR[PVI][F.ID] !== want) return;
+    body.innerHTML = '<div class="notice">미리보기를 불러오지 못했습니다.<br>네트워크 상태를 확인한 뒤 다시 시도해 주세요.</div>';
+    const again = el('button', 'btn');
+    again.style.cssText = 'display:block;margin:14px auto';
+    again.textContent = '다시 시도';
+    again.onclick = () => { cache.delete(want); openPv(PVI); };
+    body.appendChild(again);
   });
 }
 // 긴 문서는 나눠서 렌더 (한 번에 8만자)
