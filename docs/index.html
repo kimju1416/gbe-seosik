@@ -24,6 +24,9 @@
   --side:268px; --bar:56px; --pane:520px;
 }
 *{box-sizing:border-box}
+/* hidden 속성은 어떤 display 지정보다 우선해야 한다.
+   (.pane-empty 등에 display:flex를 주면 hidden이 무시되어 요소가 계속 자리를 차지한다) */
+[hidden]{display:none !important}
 html,body{margin:0;padding:0}
 body{
   font-family:Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
@@ -298,7 +301,7 @@ a{color:var(--pt);text-decoration:none}
       자료 출처 · <a href="https://www.gbe.kr/edupia/main.do" target="_blank" rel="noopener">경상북도교육청 학교지원종합자료실</a>
       (2026-07-22 기준) · 파일은 자료실 원본 서버에서 직접 내려받습니다.
       <br>경상북도교육청이 운영하는 공식 사이트가 아니며, 서식의 권리는 경상북도교육청에 있습니다.
-      <br><span class="ver">화면 버전 2026-07-26 (6)</span>
+      <br><span class="ver">화면 버전 2026-07-26 (7)</span>
     </footer>
   </main>
 
