@@ -18,7 +18,7 @@
   --ok:#1D7A4D; --warn:#B26B0F; --err:#C0392B;
   --r1:10px; --r2:14px;
   --sh:0 1px 3px rgba(0,0,0,.06);
-  --side:268px; --bar:56px;
+  --side:268px; --bar:56px; --pane:520px;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
@@ -36,8 +36,9 @@ a{color:var(--pt);text-decoration:none}
   position:sticky;top:0;z-index:40;height:var(--bar);background:var(--bg);
   border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:14px;padding:0 20px;
 }
-.bar h1{font-size:17px;font-weight:600;margin:0;white-space:nowrap}
-.bar h1 span{color:var(--tx-t);font-weight:400;font-size:13px;margin-left:8px}
+.bar h1{font-size:17px;font-weight:600;margin:0;white-space:nowrap;display:flex;align-items:center;gap:9px}
+.bar h1 .sym{width:26px;height:26px;flex:0 0 auto}
+.bar h1 span{color:var(--tx-t);font-weight:400;font-size:13px}
 .search{position:relative;flex:1;max-width:460px;margin-left:auto}
 .search input{
   width:100%;height:38px;border:1px solid var(--bd);border-radius:var(--r1);
@@ -88,10 +89,10 @@ a{color:var(--pt);text-decoration:none}
 .chip.on{background:var(--pt);border-color:var(--pt);color:#fff}
 
 /* ── 목록 ── */
-.list{background:var(--card);border:1px solid var(--bd);border-radius:var(--r2);overflow:hidden}
+.list{background:var(--card);border:1px solid var(--bd);border-radius:var(--r2);overflow:hidden;max-width:880px}
 .grp{padding:11px 16px;background:#FAFBFD;border-bottom:1px solid var(--bd-s);font-size:12.5px;font-weight:600;color:var(--tx-s);letter-spacing:.02em}
 .grp:not(:first-child){border-top:1px solid var(--bd-s)}
-.row{display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid var(--bd-s);min-height:60px}
+.row{display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid var(--bd-s);min-height:60px;cursor:pointer}
 .row:last-child{border-bottom:none}
 .row:hover{background:#FAFBFD}
 .ext{
@@ -160,6 +161,47 @@ a{color:var(--pt);text-decoration:none}
 }
 .loading{color:var(--tx-t);text-align:center;padding:40px}
 
+/* ── 우측 미리보기 패널 ── */
+.pane{
+  display:none;width:var(--pane);flex:0 0 var(--pane);position:sticky;top:var(--bar);
+  height:calc(100vh - var(--bar));border-left:1px solid var(--bd);background:var(--card);
+}
+.pane-empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:32px;color:var(--tx-t)}
+.pane-empty p{margin:0;text-align:center;font-size:14px;line-height:1.7}
+.sym-lg{width:46px;height:46px;opacity:.35}
+.pane-doc{height:100%;display:flex;flex-direction:column}
+.pane-head{display:flex;align-items:flex-start;gap:8px;padding:14px 16px;border-bottom:1px solid var(--bd)}
+.pane-head .tt{flex:1;min-width:0}
+.pane-head h3{margin:0;font-size:15.5px;font-weight:600;line-height:1.4;word-break:break-word}
+.pane-head .sub{font-size:12px;color:var(--tx-t);margin-top:4px;line-height:1.5}
+.pane-body{flex:1;overflow-y:auto;padding:20px 22px}
+.pane-body::-webkit-scrollbar{width:8px}
+.pane-body::-webkit-scrollbar-thumb{background:#D6DEEA;border-radius:4px}
+.pane-foot{display:flex;align-items:center;gap:8px;padding:10px 16px;border-top:1px solid var(--bd);background:#FAFBFD}
+.pane-foot .sp{margin-left:auto}
+.row.sel{background:var(--pt-w)}
+.row.sel:hover{background:var(--pt-w)}
+@media(min-width:1180px){
+  .pane{display:block}
+  .main{max-width:none}
+  .ov{display:none !important}
+}
+
+/* ── 사용설명서 ── */
+.guide{background:var(--card);border:1px solid var(--bd);border-radius:var(--r2);padding:28px 30px;max-width:760px}
+.guide h3{font-size:16px;font-weight:700;margin:28px 0 10px}
+.guide h3:first-child{margin-top:0}
+.guide p{margin:0 0 10px;font-size:14.5px;line-height:1.75}
+.guide ul{margin:0 0 12px;padding-left:20px;font-size:14.5px;line-height:1.75}
+.guide li{margin-bottom:5px}
+.guide .box{border:1px solid var(--bd);background:#FAFBFD;border-radius:var(--r1);padding:14px 16px;margin:12px 0;font-size:14px;color:var(--tx-s);line-height:1.7}
+.guide kbd{border:1px solid var(--bd);border-bottom-width:2px;border-radius:5px;padding:1px 6px;font-size:12.5px;background:#fff;font-family:inherit}
+.guide dl{margin:0}
+.guide dt{font-weight:600;font-size:14px;margin-top:12px}
+.guide dd{margin:2px 0 0;font-size:14px;color:var(--tx-s);line-height:1.7}
+.foot{margin-top:22px;font-size:12.5px;color:var(--tx-t);line-height:1.7}
+.foot a{color:var(--tx-s);text-decoration:underline}
+
 /* ── 모바일 ── */
 .scrim{position:fixed;inset:0;background:rgba(15,23,42,.4);z-index:44;display:none}
 @media(max-width:860px){
@@ -193,11 +235,24 @@ a{color:var(--pt);text-decoration:none}
 </head>
 <body>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="gbeBlue" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#2E9CC9"/><stop offset="1" stop-color="#173990"/>
+    </linearGradient>
+    <symbol id="gbeSym" viewBox="0 0 100 100">
+      <path fill="#8DC63F" d="M9,50 A41,41 0 0 1 71,15.2 L61.6,30.9 A23,23 0 0 0 27,50 Z"/>
+      <path fill="url(#gbeBlue)" d="M91,50 A41,41 0 0 1 9,50 L27,50 A23,23 0 0 0 73,50 Z"/>
+      <path fill="#F99B1C" d="M69.5,35 L88.5,35 A41,41 0 0 1 85,62 L70.5,56.5 A23,23 0 0 0 69.5,35 Z"/>
+    </symbol>
+  </defs>
+</svg>
+
 <header class="bar">
   <button class="menu-btn" id="menuBtn" aria-label="분류 메뉴">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
   </button>
-  <h1>경상북도교육청 서식 꾸러미 <span id="totalCnt"></span></h1>
+  <h1><svg class="sym" aria-hidden="true"><use href="#gbeSym"/></svg>경상북도교육청 서식 꾸러미 <span id="totalCnt"></span></h1>
   <div class="search">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
     <input id="q" type="search" placeholder="서식 이름·업무로 검색" autocomplete="off" aria-label="서식 검색">
@@ -219,7 +274,40 @@ a{color:var(--pt);text-decoration:none}
       <div class="tools" id="tools"></div>
     </div>
     <div id="listWrap"></div>
+    <footer class="foot">
+      자료 출처 · <a href="https://www.gbe.kr/edupia/main.do" target="_blank" rel="noopener">경상북도교육청 학교지원종합자료실</a>
+      (2026-07-22 기준) · 파일은 자료실 원본 서버에서 직접 내려받습니다.
+      <br>경상북도교육청이 운영하는 공식 사이트가 아니며, 서식의 권리는 경상북도교육청에 있습니다.
+    </footer>
   </main>
+
+  <aside class="pane" id="pane" aria-label="서식 미리보기">
+    <div class="pane-empty" id="paneEmpty">
+      <svg class="sym-lg" aria-hidden="true"><use href="#gbeSym"/></svg>
+      <p>목록에서 서식을 고르면<br>이 자리에서 내용을 볼 수 있습니다.</p>
+    </div>
+    <div class="pane-doc" id="paneDoc" hidden>
+      <div class="pane-head">
+        <div class="tt">
+          <h3 id="pnTitle"></h3>
+          <div class="sub" id="pnSub"></div>
+        </div>
+        <button class="icon-btn" id="pnPrev" title="이전 서식 (←)" aria-label="이전 서식">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <button class="icon-btn" id="pnNext" title="다음 서식 (→)" aria-label="다음 서식">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <div class="pane-body" id="pnBody"></div>
+      <div class="pane-foot">
+        <a class="btn" id="pnSrc" target="_blank" rel="noopener">자료실 원문</a>
+        <button class="star" id="pnStar" title="즐겨찾기" aria-label="즐겨찾기"></button>
+        <span class="sp"></span>
+        <a class="btn pri" id="pnDl">내려받기</a>
+      </div>
+    </div>
+  </aside>
 </div>
 
 <div class="ov" id="ov">
@@ -306,6 +394,8 @@ function buildSide() {
     () => { VIEW = { mode: 'all', t: -1, c: -1, k: -1, q: '' }; $('#q').value = ''; afterNav(); }));
   side.appendChild(mk('즐겨찾기', FAV.set.size || null, VIEW.mode === 'fav',
     () => { VIEW = { mode: 'fav', t: -1, c: -1, k: -1, q: '' }; $('#q').value = ''; afterNav(); }));
+  side.appendChild(mk('사용설명서', null, VIEW.mode === 'guide',
+    () => { VIEW = { mode: 'guide', t: -1, c: -1, k: -1, q: '' }; $('#q').value = ''; afterNav(); }));
 
   const lbl = el('div', 'nav-lbl'); lbl.textContent = '업무 영역';
   side.appendChild(lbl);
@@ -361,6 +451,12 @@ function current() {
 
 // ── 렌더 ──
 function render() {
+  const keepId = (PVI >= 0 && CUR[PVI]) ? CUR[PVI][F.ID] : -1;
+  if (VIEW.mode === 'guide') {
+    if (usePane()) clearPane(); else closePv();
+    renderGuide();
+    return;
+  }
   CUR = current();
   const q = VIEW.q.trim();
 
@@ -412,6 +508,7 @@ function render() {
       e.querySelector('.empty').appendChild(b);
     }
     wrap.appendChild(e);
+    syncSel(keepId);
     return;
   }
 
@@ -435,6 +532,75 @@ function render() {
     list.appendChild(m);
   }
   wrap.appendChild(list);
+  syncSel(keepId);
+}
+
+// 목록이 다시 그려져도 보고 있던 서식의 선택 상태를 유지한다
+function syncSel(keepId) {
+  if (keepId < 0) { markSel(); return; }
+  const i = CUR.findIndex(f => f[F.ID] === keepId);
+  if (i < 0) { if (usePane()) clearPane(); else closePv(); return; }
+  PVI = i;
+  markSel();
+}
+
+// ── 사용설명서 ──
+function renderGuide() {
+  CUR = [];
+  $('#title').textContent = '사용설명서';
+  $('#cnt').textContent = '';
+  $('#crumb').innerHTML = '';
+  $('#tools').innerHTML = '';
+  const dead = DB.forms.filter(f => f[F.DEAD]).length;
+  const noprev = DB.forms.filter(f => !f[F.PREV]).length;
+  $('#listWrap').innerHTML = `
+<div class="guide">
+  <h3>이 사이트는 무엇인가요</h3>
+  <p>경상북도교육청 학교지원종합자료실에 공개된 업무 서식 ${DB.meta.total.toLocaleString()}종을 한자리에서
+  찾아보고, <b>내려받기 전에 내용을 미리 확인</b>할 수 있게 정리한 페이지입니다.
+  자료실에서는 메뉴를 단계별로 눌러 들어가야 하지만, 여기서는 이름으로 바로 검색됩니다.</p>
+
+  <h3>쓰는 방법</h3>
+  <dl>
+    <dt>찾기</dt>
+    <dd>위쪽 검색창에 서식 이름이나 업무명을 넣습니다. 여러 낱말을 띄어 쓰면 모두 포함된 것만 나옵니다
+    (예: <b>체험학습 신청</b>). 왼쪽 목록에서 업무 영역 → 분야 → 업무 순으로 좁혀 볼 수도 있습니다.</dd>
+    <dt>미리보기</dt>
+    <dd>목록에서 서식을 누르면 오른쪽에 본문이 나타납니다. 화면이 좁으면 창 형태로 열립니다.
+    <kbd>←</kbd> <kbd>→</kbd> 로 앞뒤 서식을 이어서 넘겨볼 수 있습니다.</dd>
+    <dt>내려받기</dt>
+    <dd>[내려받기]를 누르면 경상북도교육청 자료실 서버에서 원본 파일을 바로 받습니다.
+    이 사이트가 파일을 따로 보관하지는 않습니다.</dd>
+    <dt>즐겨찾기</dt>
+    <dd>별 표시를 눌러 두면 왼쪽 <b>즐겨찾기</b>에 모입니다. 사용하는 브라우저에만 저장되며,
+    다른 기기나 다른 브라우저에는 따라가지 않습니다.</dd>
+    <dt>주소 공유</dt>
+    <dd>분류를 고르거나 검색하면 주소가 함께 바뀝니다. 그 주소를 복사해 두면 같은 화면으로 다시 열립니다.</dd>
+  </dl>
+
+  <h3>출처와 표기</h3>
+  <ul>
+    <li>자료 출처 — <a href="${DB.meta.source}" target="_blank" rel="noopener">경상북도교육청 학교지원종합자료실</a></li>
+    <li>수집 시점 — ${DB.meta.collected} 기준 공개 자료</li>
+    <li>서식의 저작권과 관리 책임은 <b>경상북도교육청</b>에 있습니다. 이 페이지는 자료실의 공개 자료를
+    찾아보기 쉽게 재구성한 것으로, <b>경상북도교육청이 운영하는 공식 사이트가 아닙니다.</b></li>
+    <li>내려받기 주소는 자료실 원본 서버(gbe.kr)를 그대로 가리킵니다.</li>
+  </ul>
+
+  <h3>미리 알아 두실 점</h3>
+  <div class="box">
+    <b>미리보기는 본문 텍스트만 보여 줍니다.</b> 글꼴·여백·표 선 굵기 같은 조판은 반영되지 않고,
+    그림은 〔이미지〕로 표시됩니다. 실제 서식 모양은 파일을 받아 확인하세요.
+  </div>
+  <ul>
+    <li>미리보기가 준비된 서식은 ${(DB.meta.total - noprev).toLocaleString()}종입니다.
+    나머지 ${noprev}종은 pptx·zip처럼 본문을 뽑을 수 없는 형식입니다.</li>
+    <li>${dead}종은 자료실 목록에는 남아 있으나 <b>원본 파일이 이미 삭제</b>되어 받을 수 없습니다.
+    해당 서식에는 표시를 해 두었고, [자료실 확인] 버튼으로 원문 페이지를 열 수 있습니다.</li>
+    <li>자료실에서 서식이 개정·교체되면 이곳 목록과 달라질 수 있습니다. 중요한 문서는 자료실 원문도 함께 확인하세요.</li>
+  </ul>
+</div>`;
+  window.scrollTo(0, 0);
 }
 
 function groupLabel(f) {
@@ -443,8 +609,11 @@ function groupLabel(f) {
   return DB.tops[f[F.T]] + ' › ' + DB.cats[f[F.C]] + ' › ' + DB.tasks[f[F.K]];
 }
 
+function redrawList() { render(); }
+
 function rowEl(f, idx) {
   const r = el('div', 'row');
+  r.onclick = () => openPv(idx);
   const ex = el('div', 'ext ' + f[F.EXT]); ex.textContent = f[F.EXT];
   const info = el('div', 'info');
   const t = el('div', 't'); t.textContent = f[F.NAME];
@@ -458,7 +627,8 @@ function rowEl(f, idx) {
   const star = el('button', 'star' + (FAV.has(f[F.ID]) ? ' on' : ''));
   star.innerHTML = STAR;
   star.title = '즐겨찾기';
-  star.onclick = () => {
+  star.onclick = e => {
+    e.stopPropagation();
     FAV.toggle(f[F.ID]);
     star.classList.toggle('on');
     if (VIEW.mode === 'fav') { SHOWN = 0; render(); }
@@ -468,8 +638,9 @@ function rowEl(f, idx) {
   pv.textContent = '미리보기';
   pv.disabled = !f[F.PREV];
   if (!f[F.PREV]) pv.title = '이 형식은 미리보기를 만들 수 없습니다';
-  pv.onclick = () => openPv(idx);
+  pv.onclick = e => { e.stopPropagation(); openPv(idx); };
   const dl = el('a', 'btn pri');
+  dl.onclick = e => e.stopPropagation();
   if (f[F.DEAD]) {
     dl.className = 'btn';
     dl.textContent = '자료실 확인';
@@ -488,15 +659,34 @@ function rowEl(f, idx) {
   return r;
 }
 
-// ── 미리보기 ──
+// ── 미리보기 (넓은 화면은 우측 패널, 좁으면 모달) ──
 const cache = new Map();
+const PANE_MQ = window.matchMedia('(min-width:1180px)');
+const usePane = () => PANE_MQ.matches;
+// 패널/모달 각각의 요소 묶음
+const UI = {
+  pane: { title:'#pnTitle', sub:'#pnSub', dl:'#pnDl', src:'#pnSrc', star:'#pnStar', prev:'#pnPrev', next:'#pnNext', body:'#pnBody' },
+  modal:{ title:'#pvTitle', sub:'#pvSub', dl:'#pvDl', src:'#pvSrc', star:'#pvStar', prev:'#pvPrev', next:'#pvNext', body:'#pvBody' },
+};
+const ui = () => UI[usePane() ? 'pane' : 'modal'];
+const pvBody = () => $(ui().body);
+
+function markSel() {
+  document.querySelectorAll('.row.sel').forEach(r => r.classList.remove('sel'));
+  if (PVI >= 0) {
+    const r = document.querySelectorAll('#listWrap .row')[PVI];
+    if (r) r.classList.add('sel');
+  }
+}
+
 function openPv(idx) {
   PVI = idx;
   const f = CUR[idx];
-  $('#pvTitle').textContent = f[F.NAME];
-  $('#pvSub').textContent = [DB.tops[f[F.T]], DB.cats[f[F.C]], DB.tasks[f[F.K]]].join(' › ')
-    + ' · ' + f[F.EXT].toUpperCase() + ' · ' + kb(f[F.SIZE]);
-  const dlb = $('#pvDl');
+  const u = ui();
+  $(u.title).textContent = f[F.NAME];
+  $(u.sub).textContent = [DB.tops[f[F.T]], DB.cats[f[F.C]], DB.tasks[f[F.K]]].join(' › ')
+    + ' · ' + f[F.EXT].toUpperCase() + (f[F.DEAD] ? '' : ' · ' + kb(f[F.SIZE]));
+  const dlb = $(u.dl);
   if (f[F.DEAD]) {
     dlb.className = 'btn'; dlb.textContent = '자료실 확인';
     dlb.href = f[F.URL]; dlb.target = '_blank'; dlb.rel = 'noopener'; dlb.removeAttribute('download');
@@ -504,16 +694,24 @@ function openPv(idx) {
     dlb.className = 'btn pri'; dlb.textContent = '내려받기';
     dlb.href = dlUrl(f); dlb.removeAttribute('target'); dlb.setAttribute('download', '');
   }
-  $('#pvSrc').href = f[F.URL];
-  const st = $('#pvStar');
+  $(u.src).href = f[F.URL];
+  const st = $(u.star);
   st.innerHTML = STAR;
   st.classList.toggle('on', FAV.has(f[F.ID]));
-  st.onclick = () => { FAV.toggle(f[F.ID]); st.classList.toggle('on'); render(); buildSide(); };
-  $('#pvPrev').disabled = idx <= 0;
-  $('#pvNext').disabled = idx >= CUR.length - 1;
-  $('#ov').classList.add('on');
-  document.body.style.overflow = 'hidden';
-  const body = $('#pvBody');
+  st.onclick = () => { FAV.toggle(f[F.ID]); st.classList.toggle('on'); redrawList(); buildSide(); };
+  $(u.prev).disabled = idx <= 0;
+  $(u.next).disabled = idx >= CUR.length - 1;
+
+  if (usePane()) {
+    $('#paneEmpty').hidden = true;
+    $('#paneDoc').hidden = false;
+  } else {
+    $('#ov').classList.add('on');
+    document.body.style.overflow = 'hidden';
+  }
+  markSel();
+
+  const body = pvBody();
   body.scrollTop = 0;
 
   if (!f[F.PREV]) {
@@ -539,7 +737,7 @@ function openPv(idx) {
 // 긴 문서는 나눠서 렌더 (한 번에 8만자)
 const CHUNK = 80000;
 function showDoc(txt) {
-  const body = $('#pvBody');
+  const body = pvBody();
   body.innerHTML = '';
   const doc = el('div', 'doc');
   body.appendChild(doc);
@@ -569,19 +767,54 @@ function closePv() {
   $('#ov').classList.remove('on');
   document.body.style.overflow = '';
   PVI = -1;
+  markSel();
 }
+function clearPane() {
+  PVI = -1;
+  $('#paneDoc').hidden = true;
+  $('#paneEmpty').hidden = false;
+  markSel();
+}
+const step = d => {
+  const n = PVI + d;
+  if (n >= 0 && n < CUR.length) {
+    if (n >= SHOWN) { SHOWN = Math.min(SHOWN + PAGE, CUR.length); redrawList(); }
+    openPv(n);
+    const r = document.querySelectorAll('#listWrap .row')[n];
+    if (r && usePane()) r.scrollIntoView({ block: 'nearest' });
+  }
+};
 $('#pvClose').onclick = closePv;
 $('#ov').onclick = e => { if (e.target === $('#ov')) closePv(); };
-$('#pvPrev').onclick = () => { if (PVI > 0) openPv(PVI - 1); };
-$('#pvNext').onclick = () => { if (PVI < CUR.length - 1) openPv(PVI + 1); };
+$('#pvPrev').onclick = () => step(-1);
+$('#pvNext').onclick = () => step(1);
+$('#pnPrev').onclick = () => step(-1);
+$('#pnNext').onclick = () => step(1);
+
 document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement !== $('#q')) { e.preventDefault(); $('#q').focus(); return; }
+  if (document.activeElement === $('#q')) { if (e.key === 'Escape') $('#q').blur(); return; }
   if ($('#ov').classList.contains('on')) {
     if (e.key === 'Escape') closePv();
-    else if (e.key === 'ArrowLeft' && PVI > 0) openPv(PVI - 1);
-    else if (e.key === 'ArrowRight' && PVI < CUR.length - 1) openPv(PVI + 1);
+    else if (e.key === 'ArrowLeft') step(-1);
+    else if (e.key === 'ArrowRight') step(1);
     return;
   }
-  if (e.key === '/' && document.activeElement !== $('#q')) { e.preventDefault(); $('#q').focus(); }
+  if (usePane() && PVI >= 0) {
+    if (e.key === 'Escape') clearPane();
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
+  }
+});
+
+// 화면 폭이 바뀌어 패널↔모달이 전환되면 열려 있던 미리보기를 옮겨 담는다
+PANE_MQ.addEventListener('change', () => {
+  const i = PVI;
+  $('#ov').classList.remove('on');
+  document.body.style.overflow = '';
+  $('#paneDoc').hidden = true;
+  $('#paneEmpty').hidden = false;
+  if (i >= 0 && i < CUR.length) openPv(i);
 });
 
 // ── 마크다운 → HTML (kordoc 산출물 대상) ──
@@ -706,6 +939,7 @@ $('#scrim').onclick = closeSide;
 // ── URL 해시 ──
 function writeHash() {
   const p = [];
+  if (VIEW.mode === 'guide') p.push('help=1');
   if (VIEW.mode === 'fav') p.push('fav=1');
   if (VIEW.mode === 'top') { p.push('t=' + VIEW.t); if (VIEW.c >= 0) p.push('c=' + VIEW.c); if (VIEW.k >= 0) p.push('k=' + VIEW.k); }
   if (VIEW.q.trim()) p.push('q=' + encodeURIComponent(VIEW.q.trim()));
@@ -713,7 +947,8 @@ function writeHash() {
 }
 function readHash() {
   const h = new URLSearchParams(location.hash.slice(1));
-  if (h.get('fav')) VIEW.mode = 'fav';
+  if (h.get('help')) VIEW.mode = 'guide';
+  else if (h.get('fav')) VIEW.mode = 'fav';
   else if (h.has('t')) {
     VIEW.mode = 'top'; VIEW.t = +h.get('t');
     if (h.has('c')) VIEW.c = +h.get('c');
