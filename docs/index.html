@@ -187,7 +187,6 @@ a{color:var(--pt);text-decoration:none}
 @media(min-width:1240px){
   .pane{display:block}
   .main{max-width:none}
-  .ov{display:none !important}
 }
 /* 패널이 뜨는 좁은 노트북 화면: 사이드바를 줄이고, 행 클릭으로 대신할 수 있는 미리보기 버튼은 감춘다 */
 @media(min-width:1240px) and (max-width:1439px){
@@ -657,15 +656,17 @@ function rowEl(f, idx) {
 
 // ── 미리보기 (넓은 화면은 우측 패널, 좁으면 모달) ──
 const cache = new Map();
-const PANE_MQ = window.matchMedia('(min-width:1240px)');
-const usePane = () => PANE_MQ.matches;
+// 패널을 쓸지 여부는 CSS가 실제로 패널을 그리는지로 판단한다.
+// (matchMedia로 따로 계산하면 화면 배율에 따라 CSS와 어긋나 아무것도 안 보이는 일이 생긴다)
+const usePane = () => getComputedStyle($('#pane')).display !== 'none';
 // 패널/모달 각각의 요소 묶음
 const UI = {
   pane: { title:'#pnTitle', sub:'#pnSub', dl:'#pnDl', src:'#pnSrc', star:'#pnStar', prev:'#pnPrev', next:'#pnNext', body:'#pnBody' },
   modal:{ title:'#pvTitle', sub:'#pvSub', dl:'#pvDl', src:'#pvSrc', star:'#pvStar', prev:'#pvPrev', next:'#pvNext', body:'#pvBody' },
 };
 const ui = () => UI[usePane() ? 'pane' : 'modal'];
-const pvBody = () => $(ui().body);
+let ACT = null;                                   // 지금 미리보기를 담고 있는 쪽
+const pvBody = () => $((ACT || ui()).body);
 
 function markSel() {
   document.querySelectorAll('.row.sel').forEach(r => r.classList.remove('sel'));
@@ -675,10 +676,11 @@ function markSel() {
   }
 }
 
-function openPv(idx) {
+function openPv(idx, forceModal) {
   PVI = idx;
   const f = CUR[idx];
-  const u = ui();
+  const u = forceModal ? UI.modal : ui();
+  ACT = u;
   $(u.title).textContent = f[F.NAME];
   $(u.sub).textContent = [DB.tops[f[F.T]], DB.cats[f[F.C]], DB.tasks[f[F.K]]].join(' › ')
     + ' · ' + f[F.EXT].toUpperCase() + (f[F.DEAD] ? '' : ' · ' + kb(f[F.SIZE]));
@@ -698,9 +700,16 @@ function openPv(idx) {
   $(u.prev).disabled = idx <= 0;
   $(u.next).disabled = idx >= CUR.length - 1;
 
-  if (usePane()) {
+  if (u === UI.pane) {
     $('#paneEmpty').hidden = true;
     $('#paneDoc').hidden = false;
+    // 어떤 이유로든 패널이 화면에 안 나오면 창으로 대신 연다 (반응 없는 상태 방지)
+    if (!$('#paneDoc').offsetParent) {
+      $('#paneDoc').hidden = true;
+      $('#paneEmpty').hidden = false;
+      openPv(idx, true);
+      return;
+    }
   } else {
     $('#ov').classList.add('on');
     document.body.style.overflow = 'hidden';
@@ -809,13 +818,21 @@ document.addEventListener('keydown', e => {
 });
 
 // 화면 폭이 바뀌어 패널↔모달이 전환되면 열려 있던 미리보기를 옮겨 담는다
-PANE_MQ.addEventListener('change', () => {
-  const i = PVI;
-  $('#ov').classList.remove('on');
-  document.body.style.overflow = '';
-  $('#paneDoc').hidden = true;
-  $('#paneEmpty').hidden = false;
-  if (i >= 0 && i < CUR.length) openPv(i);
+let lastPane = null, rzT = null;
+window.addEventListener('resize', () => {
+  clearTimeout(rzT);
+  rzT = setTimeout(() => {
+    const now = usePane();
+    if (lastPane === null) { lastPane = now; return; }
+    if (now === lastPane) return;
+    lastPane = now;
+    const i = PVI;
+    $('#ov').classList.remove('on');
+    document.body.style.overflow = '';
+    $('#paneDoc').hidden = true;
+    $('#paneEmpty').hidden = false;
+    if (i >= 0 && i < CUR.length) openPv(i);
+  }, 180);
 });
 
 // ── 마크다운 → HTML (kordoc 산출물 대상) ──
