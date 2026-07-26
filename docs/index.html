@@ -75,6 +75,11 @@ a{color:var(--pt);text-decoration:none}
 .nav-i .n{margin-left:auto;font-size:12px;color:var(--tx-t);font-variant-numeric:tabular-nums}
 .nav-i.on .n{color:var(--pt)}
 .nav-i .ar{color:var(--tx-t);transition:transform .15s;flex:0 0 auto}
+.nav-star{display:flex;align-items:center;color:#C6D0DC;flex:0 0 auto}
+.nav-star svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.9}
+.nav-i.has-fav .nav-star{color:#F0A020}
+.nav-i.has-fav .nav-star svg{fill:currentColor;stroke-width:1.4}
+.nav-i.has-fav .n{color:#C07D0C;font-weight:600}
 .nav-i.open .ar{transform:rotate(90deg)}
 .sub{padding-left:8px;margin-bottom:4px}
 .sub .nav-i{font-size:13.5px;padding:7px 10px;min-height:34px;color:var(--tx-s)}
@@ -124,9 +129,22 @@ a{color:var(--pt);text-decoration:none}
 .btn.pri{background:var(--pt);border-color:var(--pt);color:#fff}
 .btn.pri:hover{background:var(--pt-h)}
 .btn:disabled{opacity:.4;cursor:default}
-.star{width:34px;height:34px;border-radius:8px;color:#CBD5E3;display:flex;align-items:center;justify-content:center}
-.star:hover{background:#F4F7FB;color:var(--tx-t)}
-.star.on{color:#E0A32E}
+/* 즐겨찾기 별 — 켜면 노랗게 채워지고 배지가 생긴다 */
+.star{
+  width:34px;height:34px;border-radius:9px;color:#AFBCCC;display:flex;align-items:center;justify-content:center;
+  border:1px solid transparent;transition:background .12s,color .12s,border-color .12s;
+}
+.star svg{fill:none;stroke:currentColor;stroke-width:1.9}
+.star:hover{background:#FFF6E5;color:#E9A420;border-color:#F6DFB0}
+.star.on{color:#F0A020;background:#FFF3DC;border-color:#F3D69C}
+.star.on svg{fill:currentColor;stroke:currentColor;stroke-width:1.4}
+.star.on:hover{background:#FFEAC4}
+.star.pop svg{animation:starPop .34s cubic-bezier(.34,1.56,.64,1)}
+@keyframes starPop{0%{transform:scale(.7)}55%{transform:scale(1.32)}100%{transform:scale(1)}}
+/* 즐겨찾기한 줄은 왼쪽에 띠를 둬 목록에서 바로 보이게 */
+.row.fav{box-shadow:inset 3px 0 0 #F0A020;background:#FFFCF5}
+.row.fav:hover{background:#FFF8EC}
+.row.fav.sel{background:var(--pt-w)}
 .more{width:100%;padding:14px;background:var(--card);border-top:1px solid var(--bd-s);font-size:14px;color:var(--pt);font-weight:500}
 .more:hover{background:#F4F7FB}
 .empty{padding:56px 20px;text-align:center;color:var(--tx-s)}
@@ -354,7 +372,7 @@ body.resizing{user-select:none;cursor:col-resize}
       자료 출처 · <a href="https://www.gbe.kr/edupia/main.do" target="_blank" rel="noopener">경상북도교육청 학교지원종합자료실</a>
       (2026-07-22 기준) · 파일은 자료실 원본 서버에서 직접 내려받습니다.
       <br>경상북도교육청이 운영하는 공식 사이트가 아니며, 서식의 권리는 경상북도교육청에 있습니다.
-      <br><span class="ver">화면 버전 2026-07-26 (9)</span>
+      <br><span class="ver">화면 버전 2026-07-26 (10)</span>
     </footer>
   </main>
 
@@ -409,7 +427,7 @@ const FAV = {
   toggle(id) { this.set.has(id) ? this.set.delete(id) : this.set.add(id);
     localStorage.setItem(this.key, JSON.stringify([...this.set])); }
 };
-const STAR = '<svg width="17" height="17" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 3.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.6 9.7l5.8-.8z"/></svg>';
+const STAR = '<svg width="18" height="18" viewBox="0 0 24 24" stroke-linejoin="round" stroke-linecap="round"><path d="M12 3.4l2.7 5.5 6 .9-4.35 4.24 1.03 5.96L12 17.2l-5.38 2.8 1.03-5.96L3.3 9.8l6-.9z"/></svg>';
 
 // ── 데이터 접근 헬퍼 (forms 행 구조: 0 id,1 top,2 cat,3 task,4 name,5 code,6 ext,7 bytes,8 fileKey,9 pageUrl,10 hasPrev)
 const F = { ID:0, T:1, C:2, K:3, NAME:4, CODE:5, EXT:6, SIZE:7, KEY:8, URL:9, PREV:10, DEAD:11 };
@@ -449,8 +467,11 @@ function buildSide() {
 
   side.appendChild(mk('전체 서식', DB.meta.total, VIEW.mode === 'all',
     () => { VIEW = { mode: 'all', t: -1, c: -1, k: -1, q: '' }; $('#q').value = ''; afterNav(); }));
-  side.appendChild(mk('즐겨찾기', FAV.set.size || null, VIEW.mode === 'fav',
-    () => { VIEW = { mode: 'fav', t: -1, c: -1, k: -1, q: '' }; $('#q').value = ''; afterNav(); }));
+  const favBtn = mk('즐겨찾기', FAV.set.size || null, VIEW.mode === 'fav',
+    () => { VIEW = { mode: 'fav', t: -1, c: -1, k: -1, q: '' }; $('#q').value = ''; afterNav(); },
+    '<span class="nav-star">' + STAR + '</span>');
+  if (FAV.set.size) favBtn.classList.add('has-fav');
+  side.appendChild(favBtn);
   side.appendChild(mk('사용설명서', null, VIEW.mode === 'guide',
     () => { VIEW = { mode: 'guide', t: -1, c: -1, k: -1, q: '' }; $('#q').value = ''; afterNav(); }));
 
@@ -680,14 +701,24 @@ function rowEl(f, idx) {
       : '<span>' + kb(f[F.SIZE]) + '</span>' + (f[F.PREV] ? '' : '<span>미리보기 없음</span>'));
   info.append(t, m);
 
+  if (FAV.has(f[F.ID])) r.classList.add('fav');
+
   const acts = el('div', 'acts');
   const star = el('button', 'star' + (FAV.has(f[F.ID]) ? ' on' : ''));
   star.innerHTML = STAR;
-  star.title = '즐겨찾기';
+  star.title = FAV.has(f[F.ID]) ? '즐겨찾기에서 빼기' : '즐겨찾기에 담기';
   star.onclick = e => {
     e.stopPropagation();
     FAV.toggle(f[F.ID]);
-    star.classList.toggle('on');
+    const on = FAV.has(f[F.ID]);
+    star.classList.toggle('on', on);
+    star.title = on ? '즐겨찾기에서 빼기' : '즐겨찾기에 담기';
+    r.classList.toggle('fav', on);
+    if (on) { star.classList.remove('pop'); void star.offsetWidth; star.classList.add('pop'); }
+    if (PVI >= 0 && CUR[PVI] && CUR[PVI][F.ID] === f[F.ID]) {
+      const ps = $('#pnStar');
+      ps.classList.toggle('on', on);
+    }
     if (VIEW.mode === 'fav') { SHOWN = 0; render(); }
     buildSide();
   };
@@ -747,7 +778,15 @@ function openPv(idx) {
   const st = $('#pnStar');
   st.innerHTML = STAR;
   st.classList.toggle('on', FAV.has(f[F.ID]));
-  st.onclick = () => { FAV.toggle(f[F.ID]); st.classList.toggle('on'); redrawList(); buildSide(); };
+  st.title = FAV.has(f[F.ID]) ? '즐겨찾기에서 빼기' : '즐겨찾기에 담기';
+  st.onclick = () => {
+    FAV.toggle(f[F.ID]);
+    const on = FAV.has(f[F.ID]);
+    st.classList.toggle('on', on);
+    st.title = on ? '즐겨찾기에서 빼기' : '즐겨찾기에 담기';
+    if (on) { st.classList.remove('pop'); void st.offsetWidth; st.classList.add('pop'); }
+    redrawList(); buildSide();
+  };
   $('#pnPrev').disabled = idx <= 0;
   $('#pnNext').disabled = idx >= CUR.length - 1;
 
